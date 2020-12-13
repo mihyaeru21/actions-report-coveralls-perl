@@ -27,6 +27,8 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
+      - name: Install Devel::Cover
+        run: cpanm -n Devel::Cover
       - name: Run tests
         env:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
