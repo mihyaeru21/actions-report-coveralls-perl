@@ -48,7 +48,7 @@ function run() {
                 throw new Error("'github-token' input missing");
             }
             yield installDep();
-            yield report(flag, dir);
+            yield report(token, flag, dir);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -60,16 +60,18 @@ function installDep() {
         yield exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
     });
 }
-function report(flag, dir) {
+function report(token, flag, dir) {
     return __awaiter(this, void 0, void 0, function* () {
-        const opts = {};
+        const opts = {
+            env: {
+                GITHUB_TOKEN: token
+            }
+        };
         if (dir) {
             opts.cwd = dir;
         }
-        if (flag) {
-            opts.env = {
-                COVERALLS_FLAG_NAME: flag
-            };
+        if (flag && opts.env) {
+            opts.env['COVERALLS_FLAG_NAME'] = flag;
         }
         yield exec_1.exec('cover', ['-report', 'coveralls'], opts);
     });

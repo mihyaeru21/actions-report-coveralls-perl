@@ -12,7 +12,7 @@ async function run(): Promise<void> {
     }
 
     await installDep()
-    await report(flag, dir)
+    await report(token, flag, dir)
   } catch (error) {
     core.setFailed(error.message)
   }
