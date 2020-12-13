@@ -31,6 +31,6 @@ jobs:
         env:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
         run: prove -lrv t
-      - uses: ../
+      - uses: ./
         with:
           milliseconds: 1000
