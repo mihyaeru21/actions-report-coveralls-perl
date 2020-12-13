@@ -2,7 +2,7 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  repo-token:
+  github-token:
     required: false
     description: 'todo'
     default: '${{ github.token }}'
