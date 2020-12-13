@@ -23,19 +23,22 @@ async function installDep(): Promise<void> {
 }
 
 async function report(
+  token: string,
   flag: string | undefined,
   dir: string | undefined
 ): Promise<void> {
-  const opts: ExecOptions = {}
+  const opts: ExecOptions = {
+    env: {
+      GITHUB_TOKEN: token
+    }
+  }
 
   if (dir) {
     opts.cwd = dir
   }
 
-  if (flag) {
-    opts.env = {
-      COVERALLS_FLAG_NAME: flag
-    }
+  if (flag && opts.env) {
+    opts.env['COVERALLS_FLAG_NAME'] = flag
   }
 
   await exec('cover', ['-report', 'coveralls'], opts)
