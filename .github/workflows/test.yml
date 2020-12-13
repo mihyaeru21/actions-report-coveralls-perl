@@ -17,8 +17,20 @@ jobs:
           npm run all
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./perl
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: Setup perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - run: perl -V
+      - name: Run tests
+        env:
+          HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
+        run: prove -lrv t
+      - uses: ../
         with:
           milliseconds: 1000
