@@ -34,11 +34,12 @@ jobs:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
         run: |
           prove -lrv t
-          pwd
-          ls -l cover_db
-      - name: Use without input
-        uses: ./
-      - name: Use with input
+      - name: Use without flag
         uses: ./
         with:
+          working-directory: ./perl
+      - name: Use with flag
+        uses: ./
+        with:
+          working-directory: ./perl
           flag-name: flag

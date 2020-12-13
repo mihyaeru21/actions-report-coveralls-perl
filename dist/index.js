@@ -42,14 +42,13 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput('github-token');
-            const flagName = core.getInput('flag-name');
+            const dir = core.getInput('working-directory');
+            const flag = core.getInput('flag-name');
             if (!token) {
                 throw new Error("'github-token' input missing");
             }
-            yield exec_1.exec('pwd');
-            yield exec_1.exec('ls', ['-al']);
             yield installDep();
-            yield report(flagName);
+            yield report(flag, dir);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -61,13 +60,18 @@ function installDep() {
         yield exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
     });
 }
-function report(flagName) {
+function report(flag, dir) {
     return __awaiter(this, void 0, void 0, function* () {
-        const env = {};
-        if (flagName) {
-            env['COVERALLS_FLAG_NAME'] = flagName;
+        const opts = {};
+        if (dir) {
+            opts.cwd = dir;
         }
-        yield exec_1.exec('cover', ['-report', 'coveralls'], { env });
+        if (flag) {
+            opts.env = {
+                COVERALLS_FLAG_NAME: flag
+            };
+        }
+        yield exec_1.exec('cover', ['-report', 'coveralls'], opts);
     });
 }
 run();
