@@ -56,7 +56,7 @@ function run() {
 }
 function installDep() {
     return __awaiter(this, void 0, void 0, function* () {
-        exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
+        return exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
     });
 }
 function report(flagName) {
@@ -65,7 +65,7 @@ function report(flagName) {
         if (flagName) {
             env['COVERALLS_FLAG_NAME'] = flagName;
         }
-        exec_1.exec('cover', ['-report', 'coveralls'], { env });
+        return exec_1.exec('cover', ['-report', 'coveralls'], { env });
     });
 }
 run();

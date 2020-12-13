@@ -17,17 +17,17 @@ async function run(): Promise<void> {
   }
 }
 
-async function installDep(): Promise<void> {
-  exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls'])
+async function installDep(): Promise<number> {
+  return exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls'])
 }
 
-async function report(flagName: string | undefined): Promise<void> {
+async function report(flagName: string | undefined): Promise<number> {
   const env: {[key: string]: string} = {}
   if (flagName) {
     env['COVERALLS_FLAG_NAME'] = flagName
   }
 
-  exec('cover', ['-report', 'coveralls'], {env})
+  return exec('cover', ['-report', 'coveralls'], {env})
 }
 
 run()
