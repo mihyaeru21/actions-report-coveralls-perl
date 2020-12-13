@@ -25,10 +25,10 @@ jobs:
       - name: Setup perl
         uses: shogo82148/actions-setup-perl@v1
         with:
-          perl-version: ${{ matrix.perl }}
+          perl-version: 5.32
       - run: perl -V
       - name: Install Devel::Cover
-        run: sudo cpanm -n Devel::Cover
+        run: cpanm -n Devel::Cover
       - name: Run tests
         env:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
