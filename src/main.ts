@@ -1,25 +1,33 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {exec} from '@actions/exec'
 
 async function run(): Promise<void> {
   try {
     const token: string = core.getInput('github-token')
+    const flagName: string = core.getInput('flag-name')
 
     if (!token) {
-      throw new Error("'github-token' input missing");
+      throw new Error("'github-token' input missing")
     }
 
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    await installDep()
+    await report(flagName)
   } catch (error) {
     core.setFailed(error.message)
   }
+}
+
+async function installDep(): Promise<void> {
+  exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls'])
+}
+
+async function report(flagName: string | undefined): Promise<void> {
+  const env: {[key: string]: string} = {}
+  if (flagName) {
+    env['COVERALLS_FLAG_NAME'] = flagName
+  }
+
+  exec('cover', ['-report', 'coveralls'], {env})
 }
 
 run()
