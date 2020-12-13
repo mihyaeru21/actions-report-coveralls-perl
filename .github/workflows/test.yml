@@ -14,11 +14,35 @@ jobs:
       - run: |
           npm install
       - run: |
-          npm run all
+          npm run build
+          npm run format
+          npm run lint
+          npm run package
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./perl
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: Setup perl
+        uses: shogo82148/actions-setup-perl@v1
         with:
-          milliseconds: 1000
+          perl-version: 5.32
+      - run: perl -V
+      - name: Install Devel::Cover
+        run: cpanm -n Devel::Cover
+      - name: Run tests
+        env:
+          HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
+        run: |
+          prove -lrv t
+      - name: Use without flag
+        uses: ./
+        with:
+          working-directory: ./perl
+      - name: Use with flag
+        uses: ./
+        with:
+          working-directory: ./perl
+          flag-name: flag
