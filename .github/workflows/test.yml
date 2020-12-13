@@ -29,14 +29,6 @@ jobs:
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: 5.32
-      - run: perl -V
-      - name: Install Devel::Cover
-        run: cpanm -n Devel::Cover
-      - name: Run tests
-        env:
-          HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
-        run: |
-          prove -lrv t
       - name: Use without flag
         uses: ./
         with:
@@ -46,3 +38,8 @@ jobs:
         with:
           working-directory: ./perl
           flag-name: flag
+      - name: Run tests
+        env:
+          HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
+        run: |
+          prove -lrv t
