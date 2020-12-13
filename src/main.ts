@@ -10,6 +10,8 @@ async function run(): Promise<void> {
       throw new Error("'github-token' input missing")
     }
 
+    await exec('pwd')
+    await exec('ls', ['-al'])
     await installDep()
     await report(flagName)
   } catch (error) {

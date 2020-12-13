@@ -32,7 +32,10 @@ jobs:
       - name: Run tests
         env:
           HARNESS_PERL_SWITCHES: '-MDevel::Cover=+ignore,^local/|^t/'
-        run: prove -lrv t
+        run: |
+          prove -lrv t
+          pwd
+          ls -l cover_db
       - name: Use without input
         uses: ./
       - name: Use with input

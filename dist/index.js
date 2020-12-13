@@ -46,6 +46,8 @@ function run() {
             if (!token) {
                 throw new Error("'github-token' input missing");
             }
+            yield exec_1.exec('pwd');
+            yield exec_1.exec('ls', ['-al']);
             yield installDep();
             yield report(flagName);
         }
@@ -56,7 +58,7 @@ function run() {
 }
 function installDep() {
     return __awaiter(this, void 0, void 0, function* () {
-        return exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
+        yield exec_1.exec('cpanm', ['-n', 'Devel::Cover::Report::Coveralls']);
     });
 }
 function report(flagName) {
@@ -65,7 +67,7 @@ function report(flagName) {
         if (flagName) {
             env['COVERALLS_FLAG_NAME'] = flagName;
         }
-        return exec_1.exec('cover', ['-report', 'coveralls'], { env });
+        yield exec_1.exec('cover', ['-report', 'coveralls'], { env });
     });
 }
 run();
